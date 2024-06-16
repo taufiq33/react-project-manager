@@ -1,8 +1,10 @@
-export default function AddProject() {
+export default function AddProject({
+  onBackHome
+}) {
   return (
     <section className="flex flex-col p-4 w-full">
       <div className="flex justify-end p-2 gap-8 mb-2">
-        <button className="text-sm font-bold hover:text-slate-600 text-slate-900" >Cancel</button>
+        <button className="text-sm font-bold hover:text-slate-600 text-slate-900" onClick={onBackHome}>Cancel</button>
         <button className="text-sm px-8 py-2 bg-slate-700 text-white rounded-lg shadow-md hover:bg-slate-500">Save</button>
       </div>
       <div>
