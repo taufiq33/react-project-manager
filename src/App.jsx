@@ -34,9 +34,13 @@ function App() {
   if( view.page === 'addProject') {
     content = <AddProject 
       onBackHome={handleBackToHome}
+      onAddNewProject={handleAddNewProject}
     />
   } else if (view.page === 'project') {
-    content = <Project project={view.payload}/>
+    content = <Project 
+      project={view.payload}
+      onDeleteProject={handleDeleteProject}
+    />
   }
 
   function handleAddProject() {
@@ -58,6 +62,23 @@ function App() {
       page: 'project',
       payload: project
     });
+  }
+
+  function handleAddNewProject(payload) {
+    setProjects([
+      ...projects,
+      {
+        id: projects.length + 1,
+        ...payload,
+        tasks: [],  
+      }
+    ]);
+  }
+
+  function handleDeleteProject(projectId) {
+    const newProjects = projects.filter(project => project.id !== projectId);
+    setProjects(newProjects);
+    handleBackToHome();
   }
 
   return (

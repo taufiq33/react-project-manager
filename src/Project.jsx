@@ -1,5 +1,6 @@
 export default function Project({
-  project
+  project,
+  onDeleteProject
 }) {
   return (
     <section className="w-full p-6">
@@ -10,7 +11,7 @@ export default function Project({
           <p className="mt-6 mb-2 text-gray-700 tracking-wide leading-6">{project.description}</p>
         </div>
         <div>
-          <button className="mr-4 text-amber-950 font-bold tracking-wider">Delete</button>
+          <button onClick={() => onDeleteProject(project.id)} className="mr-4 text-amber-950 font-bold tracking-wider">Delete</button>
         </div>
 
       </div>
