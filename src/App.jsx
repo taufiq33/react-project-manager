@@ -3,11 +3,25 @@ import DefaultContent from "./DefaultContent";
 import AddProject from "./AddProject";
 import Sidebar from "./Sidebar";
 
+let dummyState = [
+  {
+    name: 'project 1',
+    dueDate: 'May 9, 2028',
+    tasks: ['task 1', 'task 2'],
+  },
+  {
+    name: 'project 2',
+    dueDate: 'December 9, 2024',
+    tasks: [],
+  }
+];
+
 function App() {
   const [view, setView] = useState({
     page: 'default',
     payload: {}
   });
+  const [projects, setProjects] = useState(dummyState);
 
   let content = <DefaultContent 
     onAddProject={handleAddProject}
@@ -38,6 +52,7 @@ function App() {
       <main className="h-screen flex">
         <Sidebar
           onAddProject={handleAddProject}
+          projects={projects}
         />
         {content}
       </main>
