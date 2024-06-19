@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import DefaultContent from "./DefaultContent";
 import AddProject from "./AddProject";
 import Sidebar from "./Sidebar";
 import Project from "./Project";
+import ModalNotification from './ModalNotification';
 
 let dummyState = [
   {
@@ -27,6 +28,8 @@ function App() {
     payload: {}
   });
   const [projects, setProjects] = useState(dummyState);
+
+  const modalRef = useRef(null);
 
   let content = <DefaultContent 
     onAddProject={handleAddProject}
@@ -73,17 +76,30 @@ function App() {
         tasks: [],  
       }
     ]);
+
+    modalRef.current.setContent({
+      title: 'success',
+      text: `Add "${payload.name}" Project Success!!!`
+    })
+    modalRef.current.open();
   }
 
   function handleDeleteProject(projectId) {
+    const { name } = projects.filter(project => project.id === projectId)[0];
     const newProjects = projects.filter(project => project.id !== projectId);
     setProjects(newProjects);
+    modalRef.current.setContent({
+      title: 'success',
+      text: `Delete '${name}' Project Success!!!`
+    })
+    modalRef.current.open();
     handleBackToHome();
   }
 
   return (
     <>
       <main className="h-screen flex">
+        <ModalNotification ref={modalRef} />
         <Sidebar
           onAddProject={handleAddProject}
           projects={projects}
