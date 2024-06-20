@@ -1,7 +1,17 @@
+import { useRef } from 'react';
 export default function Project({
   project,
-  onDeleteProject
+  onDeleteProject,
+  onAddProjectTask
 }) {
+  const inputRef = useRef(null);
+
+  function handleAddTask(event) {
+    event.preventDefault();
+    onAddProjectTask(project.id, inputRef.current.value);
+    inputRef.current.value = '';
+  }
+
   return (
     <section className="w-full p-6">
       <div className="flex justify-between p-4">
@@ -15,25 +25,27 @@ export default function Project({
         </div>
 
       </div>
-      <hr className="mt-6 mb-3"/>
+      <hr className="mt-6 mb-3" />
       <div className="p-6">
         <h4 className="text-xl font-bold mb-4">Tasks</h4>
         <div className="flex gap-2">
-          <input className="focus:outline-none p-1 bg-gray-200 rounded" type="text" />
-          <button className="ml-1">Add Task</button>
+          <form onSubmit={handleAddTask}>
+            <input ref={inputRef} required className="focus:outline-none p-1 bg-gray-200 rounded" type="text" />
+            <button type='submit' className="ml-1">Add Task</button>
+          </form>
         </div>
       </div>
       <div className="p-6 w-full">
         {project.tasks.length > 0 && (
           project.tasks.map((task, index) => {
             return <div className="bg-slate-200 my-1 flex justify-between w-2/3 p-1" key={task}>
-              <p><b>{index+1}-</b> {task}</p>
+              <p><b>{index + 1}-</b> {task}</p>
               <p className="flex gap-2 justify-around pr-2">
                 <button>Edit</button>
                 <button>Delete</button>
               </p>
             </div>
-            
+
           })
         )}
         {project.tasks.length < 1 && <p>This project doesn't have any task yet.</p>}

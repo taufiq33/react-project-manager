@@ -43,6 +43,7 @@ function App() {
     content = <Project 
       project={view.payload}
       onDeleteProject={handleDeleteProject}
+      onAddProjectTask={handleAddProjectTask}
     />
   }
 
@@ -94,6 +95,19 @@ function App() {
     })
     modalRef.current.open();
     handleBackToHome();
+  }
+
+  function handleAddProjectTask(projectId, task){
+    const copyProjects = [...projects];
+    const projectIndex = projects.findIndex(project => project.id === projectId);
+    
+    const project = projects.filter(project => project.id === projectId)[0];
+    project.tasks = [
+      ...project.tasks,
+      task
+    ];
+    copyProjects.splice(projectIndex, 1, project); 
+    setProjects(copyProjects);
   }
 
   return (
