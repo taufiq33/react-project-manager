@@ -44,6 +44,7 @@ function App() {
       project={view.payload}
       onDeleteProject={handleDeleteProject}
       onAddProjectTask={handleAddProjectTask}
+      onHandleDeleteProjectTask={handleDeleteProjectTask}
     />
   }
 
@@ -108,6 +109,22 @@ function App() {
     ];
     copyProjects.splice(projectIndex, 1, project); 
     setProjects(copyProjects);
+  }
+
+  function handleDeleteProjectTask(projectId, taskIndex, task) {
+    const copyProjects = [...projects];
+    const projectIndex = projects.findIndex(project => project.id === projectId);
+    
+    const project = projects.filter(project => project.id === projectId)[0];
+    const taskToDelete = project.tasks[taskIndex];
+    if(taskToDelete === task) {
+      project.tasks.splice(taskIndex, 1);
+      console.log(project);
+      copyProjects.splice(projectIndex, 1, project);
+      setProjects(copyProjects);
+    } else {
+      console.error('Error when deleting task');
+    }
   }
 
   return (

@@ -1,8 +1,9 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 export default function Project({
   project,
   onDeleteProject,
-  onAddProjectTask
+  onAddProjectTask,
+  onHandleDeleteProjectTask
 }) {
   const inputRef = useRef(null);
 
@@ -40,9 +41,9 @@ export default function Project({
           project.tasks.map((task, index) => {
             return <div className="bg-slate-200 my-1 flex justify-between w-2/3 p-1" key={task}>
               <p><b>{index + 1}-</b> {task}</p>
-              <p className="flex gap-2 justify-around pr-2">
-                <button>Edit</button>
-                <button>Delete</button>
+              <p className="flex gap-3 justify-around pr-2">
+                <button className='hover:text-slate-500'>Edit</button>
+                <button className='hover:text-slate-500' onClick={() => onHandleDeleteProjectTask(project.id, index, task)}>Delete</button>
               </p>
             </div>
 
