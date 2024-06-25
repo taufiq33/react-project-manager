@@ -3,14 +3,28 @@ export default function Project({
   project,
   onDeleteProject,
   onAddProjectTask,
-  onHandleDeleteProjectTask
+  onHandleDeleteProjectTask,
+  onEditProjectTask
 }) {
+  const [submitMode, setSubmitMode] = useState('Add Task');
   const inputRef = useRef(null);
 
-  function handleAddTask(event) {
+  function handleSubmitTask(event) {
     event.preventDefault();
-    onAddProjectTask(project.id, inputRef.current.value);
-    inputRef.current.value = '';
+    if(submitMode === 'Add Task') {
+      onAddProjectTask(project.id, inputRef.current.value);
+      inputRef.current.value = '';
+    } else if (submitMode === 'Edit Task') {
+      onEditProjectTask(project.id, inputRef.current.taskIndex, inputRef.current.value);
+      inputRef.current.value = '';
+      setSubmitMode('Add Task');
+    }
+  }
+
+  function handleEditTask(index, task) {
+    setSubmitMode('Edit Task');
+    inputRef.current.value = task;
+    inputRef.current.taskIndex = index;
   }
 
   return (
@@ -30,9 +44,9 @@ export default function Project({
       <div className="p-6">
         <h4 className="text-xl font-bold mb-4">Tasks</h4>
         <div className="flex gap-2">
-          <form onSubmit={handleAddTask}>
+          <form onSubmit={handleSubmitTask}>
             <input ref={inputRef} required className="focus:outline-none p-1 bg-gray-200 rounded" type="text" />
-            <button type='submit' className="ml-1">Add Task</button>
+            <button type='submit' className="ml-1">{submitMode}</button>
           </form>
         </div>
       </div>
@@ -42,7 +56,7 @@ export default function Project({
             return <div className="bg-slate-200 my-1 flex justify-between w-2/3 p-1" key={task}>
               <p><b>{index + 1}-</b> {task}</p>
               <p className="flex gap-3 justify-around pr-2">
-                <button className='hover:text-slate-500'>Edit</button>
+                <button className='hover:text-slate-500' onClick={() => handleEditTask(index, task)}>Edit</button>
                 <button className='hover:text-slate-500' onClick={() => onHandleDeleteProjectTask(project.id, index, task)}>Delete</button>
               </p>
             </div>

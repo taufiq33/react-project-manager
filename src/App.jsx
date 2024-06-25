@@ -41,10 +41,11 @@ function App() {
     />
   } else if (view.page === 'project') {
     content = <Project 
-      project={view.payload}
+      project={projects.filter(project => project.id === view.payload)[0]}
       onDeleteProject={handleDeleteProject}
       onAddProjectTask={handleAddProjectTask}
       onHandleDeleteProjectTask={handleDeleteProjectTask}
+      onEditProjectTask={handleEditProjectTask}
     />
   }
 
@@ -62,10 +63,10 @@ function App() {
     });
   }
 
-  function handleProjectDetail(project) {
+  function handleProjectDetail(projectId) {
     setView({
       page: 'project',
-      payload: project
+      payload: projectId
     });
   }
 
@@ -125,6 +126,21 @@ function App() {
     } else {
       console.error('Error when deleting task');
     }
+  }
+
+  function handleEditProjectTask(projectId, taskIndex, taskEdited){
+    const copyProjects = JSON.parse(JSON.stringify(projects));
+    
+    const project = copyProjects.filter(project => project.id === projectId)[0];
+    project.tasks = project.tasks.map((task, index) => {
+      if(index === taskIndex) {
+        return taskEdited
+      } else {
+        return task
+      }
+    });
+
+    setProjects(copyProjects);
   }
 
   return (

@@ -10,7 +10,7 @@ export default function Sidebar({
 
       <ul className="flex flex-col gap-3 justify-center items-center">
         {projects.map((project) => {
-          return <li onClick={() => onViewDetailProject(project)} key={project.name} className="p-1 bg-slate-800 hover:bg-slate-500 cursor-pointer rounded w-full text-center">{project.name}</li>
+          return <li onClick={() => onViewDetailProject(project.id)} key={project.name} className="p-1 bg-slate-800 hover:bg-slate-500 cursor-pointer rounded w-full text-center">{project.name}</li>
         })}
         
   
