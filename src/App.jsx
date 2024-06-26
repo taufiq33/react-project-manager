@@ -7,7 +7,7 @@ import ModalNotification from './ModalNotification';
 
 let dummyState = [
   {
-    id: 1,
+    id: crypto.randomUUID(),
     name: 'project 1',
     description: 'Etiam euismod pharetra lacus, in molestie lorem gravida euismod. Curabitur et dapibus metus, sit amet lacinia velit. Phasellus tincidunt erat sed felis dapibus scelerisque. ',
     dueDate: 'May 9, 2028',
@@ -21,7 +21,7 @@ let dummyState = [
     ],
   },
   {
-    id: 2,
+    id: crypto.randomUUID(),
     name: 'project 2',
     description: 'Plan B of project 1',
     dueDate: 'December 9, 2024',
@@ -81,7 +81,7 @@ function App() {
     setProjects([
       ...projects,
       {
-        id: projects.length + 1,
+        id: crypto.randomUUID(),
         ...payload,
         tasks: [],  
       }
