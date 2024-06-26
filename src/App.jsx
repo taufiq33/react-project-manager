@@ -11,7 +11,14 @@ let dummyState = [
     name: 'project 1',
     description: 'Etiam euismod pharetra lacus, in molestie lorem gravida euismod. Curabitur et dapibus metus, sit amet lacinia velit. Phasellus tincidunt erat sed felis dapibus scelerisque. ',
     dueDate: 'May 9, 2028',
-    tasks: ['task 1', 'task 2'],
+    tasks: [
+      {
+        'id': crypto.randomUUID(), name: 'task 1 on project 1',
+      },
+      {
+        'id': crypto.randomUUID(), name: 'second task on project 1',
+      }
+    ],
   },
   {
     id: 2,
@@ -100,40 +107,37 @@ function App() {
   }
 
   function handleAddProjectTask(projectId, task){
-    const copyProjects = [...projects];
-    const projectIndex = projects.findIndex(project => project.id === projectId);
-    
-    const project = projects.filter(project => project.id === projectId)[0];
-    project.tasks = [
-      ...project.tasks,
-      task
-    ];
-    copyProjects.splice(projectIndex, 1, project); 
-    setProjects(copyProjects);
-  }
-
-  function handleDeleteProjectTask(projectId, taskIndex, task) {
-    const copyProjects = [...projects];
-    const projectIndex = projects.findIndex(project => project.id === projectId);
-    
-    const project = projects.filter(project => project.id === projectId)[0];
-    const taskToDelete = project.tasks[taskIndex];
-    if(taskToDelete === task) {
-      project.tasks.splice(taskIndex, 1);
-      console.log(project);
-      copyProjects.splice(projectIndex, 1, project);
-      setProjects(copyProjects);
-    } else {
-      console.error('Error when deleting task');
-    }
-  }
-
-  function handleEditProjectTask(projectId, taskIndex, taskEdited){
     const copyProjects = JSON.parse(JSON.stringify(projects));
     
     const project = copyProjects.filter(project => project.id === projectId)[0];
-    project.tasks = project.tasks.map((task, index) => {
-      if(index === taskIndex) {
+    project.tasks = [
+      ...project.tasks,
+      {
+        id: crypto.randomUUID(),
+        name: task
+      }
+    ];
+    
+    setProjects(copyProjects);
+  }
+
+  function handleDeleteProjectTask(projectId, taskD) {
+    const copyProjects = JSON.parse(JSON.stringify(projects));
+    
+    const project = copyProjects.filter(project => project.id === projectId)[0];
+    project.tasks = project.tasks.filter((task) => {
+      return task.id !== taskD.id
+    });
+    
+    setProjects(copyProjects);
+  }
+
+  function handleEditProjectTask(projectId, taskEdited){
+    const copyProjects = JSON.parse(JSON.stringify(projects));
+    
+    const project = copyProjects.filter(project => project.id === projectId)[0];
+    project.tasks = project.tasks.map((task) => {
+      if(task.id === taskEdited.id) {
         return taskEdited
       } else {
         return task

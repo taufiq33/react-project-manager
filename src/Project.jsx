@@ -15,16 +15,19 @@ export default function Project({
       onAddProjectTask(project.id, inputRef.current.value);
       inputRef.current.value = '';
     } else if (submitMode === 'Edit Task') {
-      onEditProjectTask(project.id, inputRef.current.taskIndex, inputRef.current.value);
+      onEditProjectTask(project.id, {
+        id: inputRef.current.taskId,
+        name: inputRef.current.value
+      });
       inputRef.current.value = '';
       setSubmitMode('Add Task');
     }
   }
 
-  function handleEditTask(index, task) {
+  function handleEditTask(task) {
     setSubmitMode('Edit Task');
-    inputRef.current.value = task;
-    inputRef.current.taskIndex = index;
+    inputRef.current.value = task.name;
+    inputRef.current.taskId = task.id;
   }
 
   return (
@@ -53,11 +56,11 @@ export default function Project({
       <div className="p-6 w-full">
         {project.tasks.length > 0 && (
           project.tasks.map((task, index) => {
-            return <div className="bg-slate-200 my-1 flex justify-between w-2/3 p-1" key={task}>
-              <p><b>{index + 1}-</b> {task}</p>
+            return <div className="bg-slate-200 my-1 flex justify-between w-2/3 p-1" key={task.id}>
+              <p><b>{index + 1}-</b> {task.name}</p>
               <p className="flex gap-3 justify-around pr-2">
-                <button className='hover:text-slate-500' onClick={() => handleEditTask(index, task)}>Edit</button>
-                <button className='hover:text-slate-500' onClick={() => onHandleDeleteProjectTask(project.id, index, task)}>Delete</button>
+                <button className='hover:text-slate-500' onClick={() => handleEditTask(task)}>Edit</button>
+                <button className='hover:text-slate-500' onClick={() => onHandleDeleteProjectTask(project.id, task)}>Delete</button>
               </p>
             </div>
 
