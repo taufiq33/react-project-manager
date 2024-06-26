@@ -8,7 +8,6 @@ export default function Project({
 }) {
   const [submitMode, setSubmitMode] = useState('Add Task');
   const inputRef = useRef(null);
-  inputRef.current.value = '';
 
   function handleSubmitTask(event) {
     event.preventDefault();

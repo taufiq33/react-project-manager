@@ -49,6 +49,7 @@ function App() {
   } else if (view.page === 'project') {
     content = <Project 
       project={projects.filter(project => project.id === view.payload)[0]}
+      key={view.payload}
       onDeleteProject={handleDeleteProject}
       onAddProjectTask={handleAddProjectTask}
       onHandleDeleteProjectTask={handleDeleteProjectTask}
