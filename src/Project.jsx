@@ -8,6 +8,7 @@ export default function Project({
 }) {
   const [submitMode, setSubmitMode] = useState('Add Task');
   const inputRef = useRef(null);
+  inputRef.current.value = '';
 
   function handleSubmitTask(event) {
     event.preventDefault();
@@ -28,6 +29,7 @@ export default function Project({
     setSubmitMode('Edit Task');
     inputRef.current.value = task.name;
     inputRef.current.taskId = task.id;
+    inputRef.current.focus();
   }
 
   return (

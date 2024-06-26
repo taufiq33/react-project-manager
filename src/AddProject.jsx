@@ -34,7 +34,7 @@ export default function AddProject({
         <div>
           <p>
             <label htmlFor="title" className="text-slate-900 tracking-widest font-xl block mt-6 mb-1">TITLE</label>
-            <input required ref={titleRef} className="border-0 border-b border-slate-400 rounded-md p-1 text-sm w-full bg-gray-200" name="title" type="text" />
+            <input autoFocus required ref={titleRef} className="border-0 border-b border-slate-400 rounded-md p-1 text-sm w-full bg-gray-200" name="title" type="text" />
           </p>
           <p>
             <label htmlFor="description" className="text-slate-900 tracking-widest font-xl block mt-6 mb-1">DESCRIPTION</label>
