@@ -48,18 +48,18 @@ export default function Project({
       <div className="p-6">
         <h4 className="text-xl font-bold mb-4">Tasks</h4>
         <div className="flex gap-2">
-          <form onSubmit={handleSubmitTask}>
+          <form onSubmit={handleSubmitTask} className='flex justify-center flex-col sm:flex-row gap-2'>
             <input ref={inputRef} required className="focus:outline-none p-1 bg-gray-200 rounded" type="text" />
-            <button type='submit' className="ml-1">{submitMode}</button>
+            <button type='submit' className="bg-slate-800 text-white p-1 rounded text-sm">{submitMode}</button>
           </form>
         </div>
       </div>
       <div className="p-6 w-full">
         {project.tasks.length > 0 && (
           project.tasks.map((task, index) => {
-            return <div className="bg-slate-200 my-1 flex justify-between w-2/3 p-1" key={task.id}>
+            return <div className="bg-slate-200 my-1 flex items-center justify-between sm:w-2/3 p-1" key={task.id}>
               <p><b>{index + 1}-</b> {task.name}</p>
-              <p className="flex gap-3 justify-around pr-2">
+              <p className="flex flex-col sm:flex-row text-sm sm:text-md gap-3 justify-around pr-2">
                 <button className='hover:text-slate-500' onClick={() => handleEditTask(task)}>Edit</button>
                 <button className='hover:text-slate-500' onClick={() => onHandleDeleteProjectTask(project.id, task)}>Delete</button>
               </p>
