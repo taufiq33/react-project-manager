@@ -19,8 +19,8 @@ export default function Sidebar({
   }
 
   return (
-    <section ref={parentSidebarContent} className="w-10 sm:w-auto sm:mt-10 bg-slate-900 text-white sm:rounded-tr-lg">
-      <button ref={buttonRef} onClick={handleMenuClick} className='bg-slate-600 p-2 border-1 border-white mt-1 rounded-lg w-8 h-auto mx-auto block hover:bg-slate-400'>
+    <section ref={parentSidebarContent} className="w-10 sm:w-auto sm:mt-10 bg-slate-900 text-white sm:rounded-tr-lg h-screen">
+      <button ref={buttonRef} onClick={handleMenuClick} className='sm:hidden bg-slate-600 p-2 border-1 border-white mt-1 rounded-lg w-8 h-auto mx-auto block hover:bg-slate-400'>
         {toggleSidebar && 'Close Sidebar' }
         {!toggleSidebar && <img src={BurgerMenuIcon} alt="" />}
       </button>

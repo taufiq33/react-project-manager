@@ -32,7 +32,7 @@ export default function Project({
   }
 
   return (
-    <section className="w-full p-6">
+    <section className="w-full p-6 max-h-full overflow-scroll">
       <div className="flex justify-between p-4">
         <div className="basis-2/3">
           <h3 className="text-2xl font-bold mb-2">{project.name}</h3>
