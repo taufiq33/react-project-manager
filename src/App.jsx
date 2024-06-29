@@ -30,26 +30,28 @@ let dummyState = [
 ];
 
 function App() {
-  const [view, setView] = useState({
-    page: 'default',
-    payload: {}
-  });
-  const [projects, setProjects] = useState(dummyState);
+
+  const [globalState, setGlobalState] = useState({
+    selectedProjectId: undefined, // undefined = defaultContent , null = addnewProject, some id Project = Project detail 
+    projects: dummyState,
+  })
 
   const modalRef = useRef(null);
 
-  let content = <DefaultContent 
-    onAddProject={handleAddProject}
-  /> 
-  if( view.page === 'addProject') {
-    content = <AddProject 
+  let content = null;
+  if (globalState.selectedProjectId === null) {
+    content = <AddProject
       onBackHome={handleBackToHome}
       onAddNewProject={handleAddNewProject}
     />
-  } else if (view.page === 'project') {
-    content = <Project 
-      project={projects.filter(project => project.id === view.payload)[0]}
-      key={view.payload}
+  } else if (globalState.selectedProjectId === undefined) {
+    content = <DefaultContent
+      onAddProject={handleAddProject}
+    />
+  } else {
+    content = <Project
+      project={globalState.projects.filter(project => project.id === globalState.selectedProjectId)[0]}
+      key={globalState.selectedProjectId}
       onDeleteProject={handleDeleteProject}
       onAddProjectTask={handleAddProjectTask}
       onHandleDeleteProjectTask={handleDeleteProjectTask}
@@ -58,35 +60,47 @@ function App() {
   }
 
   function handleAddProject() {
-    setView({
-      page: 'addProject',
-      payload: {}
-    });
+    setGlobalState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: null,
+      }
+    })
   }
 
   function handleBackToHome() {
-    setView({
-      page: 'default',
-      payload: {}
-    });
+    setGlobalState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+      }
+    })
   }
 
   function handleProjectDetail(projectId) {
-    setView({
-      page: 'project',
-      payload: projectId
-    });
+    setGlobalState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: projectId,
+      }
+    })
   }
 
   function handleAddNewProject(payload) {
-    setProjects([
-      ...projects,
-      {
-        id: crypto.randomUUID(),
-        ...payload,
-        tasks: [],  
+
+    setGlobalState((prevState) => {
+      return {
+        ...prevState,
+        projects: [
+          ...prevState.projects,
+          {
+            id: crypto.randomUUID(),
+            ...payload,
+            tasks: [],
+          }
+        ]
       }
-    ]);
+    })
 
     modalRef.current.setContent({
       title: 'success',
@@ -96,56 +110,89 @@ function App() {
   }
 
   function handleDeleteProject(projectId) {
-    const { name } = projects.filter(project => project.id === projectId)[0];
-    const newProjects = projects.filter(project => project.id !== projectId);
-    setProjects(newProjects);
+
+    setGlobalState((prevState) => {
+      return {
+        selectedProjectId: undefined,
+        projects: prevState.projects.filter(project => project.id !== projectId),
+      }
+    })
+
     modalRef.current.setContent({
       title: 'success',
-      text: `Delete '${name}' Project Success!!!`
+      text: `Delete Project Success!!!`
     })
     modalRef.current.open();
-    handleBackToHome();
   }
 
-  function handleAddProjectTask(projectId, task){
-    const copyProjects = JSON.parse(JSON.stringify(projects));
-    
-    const project = copyProjects.filter(project => project.id === projectId)[0];
-    project.tasks = [
-      ...project.tasks,
-      {
-        id: crypto.randomUUID(),
-        name: task
+  function handleAddProjectTask(projectId, task) {
+
+    setGlobalState((prevState) => {
+      return {
+        ...prevState,
+        projects: prevState.projects.map(project => {
+          if (project.id === projectId) {
+            return {
+              ...project,
+              tasks: [
+                ...project.tasks,
+                {
+                  id: crypto.randomUUID(),
+                  name: task
+                }
+              ],
+            };
+          } else {
+            return project;
+          }
+        }),
       }
-    ];
-    
-    setProjects(copyProjects);
+    });
+
   }
 
   function handleDeleteProjectTask(projectId, taskD) {
-    const copyProjects = JSON.parse(JSON.stringify(projects));
-    
-    const project = copyProjects.filter(project => project.id === projectId)[0];
-    project.tasks = project.tasks.filter((task) => {
-      return task.id !== taskD.id
-    });
-    
-    setProjects(copyProjects);
-  }
 
-  function handleEditProjectTask(projectId, taskEdited){
-    const copyProjects = JSON.parse(JSON.stringify(projects));
-    
-    const project = copyProjects.filter(project => project.id === projectId)[0];
-    project.tasks = project.tasks.map((task) => {
-      if(task.id === taskEdited.id) {
-        return taskEdited
-      } else {
-        return task
+    setGlobalState((prevState) => {
+      return {
+        ...prevState,
+        projects: prevState.projects.map(project => {
+          if (project.id === projectId) {
+            return {
+              ...project,
+              tasks: project.tasks.filter(task => task.id !== taskD.id)
+            };
+          } else {
+            return project;
+          }
+        }),
       }
     });
+  }
 
-    setProjects(copyProjects);
+  function handleEditProjectTask(projectId, taskEdited) {
+
+    setGlobalState((prevState) => {
+      return {
+        ...prevState,
+        projects: prevState.projects.map(project => {
+          if (project.id === projectId) {
+            return {
+              ...project,
+              tasks: project.tasks.map((task) => {
+                if(task.id === taskEdited.id) {
+                  return taskEdited
+                } else {
+                  return task;
+                }
+              })
+            };
+          } else {
+            return project;
+          }
+        }),
+      }
+    });
   }
 
   return (
@@ -154,13 +201,13 @@ function App() {
         <ModalNotification ref={modalRef} />
         <Sidebar
           onAddProject={handleAddProject}
-          projects={projects}
+          projects={globalState.projects}
           onViewDetailProject={handleProjectDetail}
         />
         {content}
       </main>
     </>
-    
+
   );
 }
 
